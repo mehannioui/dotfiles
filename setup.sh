@@ -33,4 +33,6 @@ fi
 echo "🔁 Reloading ~/.zshrc..."
 source ~/.zshrc
 
-echo "✅ Done! You can now run: devrc-init"
+echo "🎉 devrc-init setup v$VERSION installed!"
+echo "👉 Run this to bootstrap a new project:"
+echo "   mkdir my-app && cd my-app && devrc-init"
