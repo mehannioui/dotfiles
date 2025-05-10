@@ -1,3 +1,6 @@
+VERSION="1.0.0"
+echo "📦 Installing devrc-init setup (v$VERSION)..."
+
 #!/bin/zsh
 
 echo "📦 Installing devrc-init dotfiles setup..."
