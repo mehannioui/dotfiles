@@ -2,28 +2,32 @@
 
 echo "📦 Installing devrc-init dotfiles setup..."
 
-# Where to clone (if not already there)
-TARGET="$HOME/dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
+BIN_PATH="$DOTFILES_DIR/bin"
 
-if [ ! -d "$TARGET" ]; then
-  echo "🔄 Cloning dotfiles repo into $TARGET..."
-  git clone https://github.com/mehannioui/dotfiles.git "$TARGET"
+# Step 1: Clone repo if missing
+if [ ! -d "$DOTFILES_DIR" ]; then
+  echo "🔄 Cloning dotfiles repo into $DOTFILES_DIR..."
+  git clone https://github.com/mehannioui/dotfiles.git "$DOTFILES_DIR"
 else
-  echo "✅ $TARGET already exists. Skipping clone."
+  echo "✅ $DOTFILES_DIR already exists. Skipping clone."
 fi
 
-# Add to PATH if not already there
-if ! printenv PATH | grep -q "$TARGET/bin"; then
-  echo "🛠️  Adding $TARGET/bin to PATH in ~/.zshrc..."
-  echo '\n# Add dotfiles/bin to path' >> ~/.zshrc
-  echo 'export PATH="$TARGET/bin:$PATH"' >> ~/.zshrc
+# Step 2: Ensure bin/devrc-init is executable
+chmod +x "$BIN_PATH/devrc-init"
+
+# Step 3: Clean old PATH lines
+sed -i '' '/dotfiles\\/bin/d' ~/.zshrc
+
+# Step 4: Add bin to PATH if not already present
+if ! grep -q "$BIN_PATH" ~/.zshrc; then
+  echo "\n# Add dotfiles/bin to path" >> ~/.zshrc
+  echo "export PATH=\"$BIN_PATH:\$PATH\"" >> ~/.zshrc
+  echo "✅ Added to PATH in ~/.zshrc"
 fi
 
-# Make sure script is executable
-chmod +x "$TARGET/bin/devrc-init"
-
-# Source updated PATH
-echo "🔁 Sourcing .zshrc..."
+# Step 5: Reload shell
+echo "🔁 Reloading ~/.zshrc..."
 source ~/.zshrc
 
-echo "✅ Done. You can now run: devrc-init"
+echo "✅ Done! You can now run: devrc-init"
