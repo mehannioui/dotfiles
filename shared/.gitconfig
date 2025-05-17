@@ -1,0 +1,11 @@
+[user]
+	name = Mohamed Hannioui
+	email = 118213854+mehannioui@users.noreply.github.com
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[user]
+	name = mehannioui
+	email = 118213854+mehannioui@users.noreply.github.com

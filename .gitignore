@@ -1,0 +1,31 @@
+# Backup and swap files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Zsh & shell history
+.zsh_history
+.zsh_sessions
+.zshrc.pre-oh-my-zsh
+.zcompdump*
+.zsh*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+.Trash/
+
+# VSCode
+.vscode/
+.vscode-react-native/
+
+# Others
+*.log
+npm-debug.log*
+.yarn/*
+node_modules/
