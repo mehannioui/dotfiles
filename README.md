@@ -4,40 +4,41 @@
 ![Platform Support](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-blue)
 ![Maintained](https://img.shields.io/badge/status-maintained-brightgreen)
 
-My personal configuration files for macOS and Linux development environments.
+My personal configuration files for macOS and Linux development environments, with an integrated terminal-based fullstack dev workflow using `tmux`.
 
-This repo is organized with a clean structure to support multiple platforms and symlinks files into the correct locations automatically.
+This repo is modular, multi-platform, and optimized for clean symlinks and developer productivity.
 
 ---
 
 ## ✨ Features
 
-- 🔁 Symlink-based setup with one command
-- 🧩 Modular structure: `shared`, `macos`, and `linux`
+- 🔁 Symlink-based installation with one command
+- 🧩 Modular structure: `shared/`, `macos/`, `linux/`, and `shared/config/`
 - ⚡ `zsh` + `oh-my-zsh` + `powerlevel10k`
 - 🐍 `vim` + `tmux` + `starship` + `wezterm`
-- 📂 XDG-style config support (`~/.config`)
-- 🧼 Clean `.gitignore` to avoid tracking noise
+- 📂 Supports XDG-compliant configs (`~/.config`)
+- 🧼 `.gitignore` avoids clutter and backups
+- 🚀 `devrc-init`: fast project bootstrapping in `tmux`
 
 ---
 
-## 📦 What's Inside?
+## 📦 Directory Structure
 
 ```bash
 dotfiles/
-├── shared/         # Universal configs: .zshrc, .vimrc, .gitconfig, etc.
-├── macos/          # macOS-specific configs (e.g., .wezterm.lua)
-├── linux/          # Linux-specific configs (e.g., .zprofile)
-├── config/         # Shared ~/.config files (e.g., starship.toml)
-├── install.sh      # 🛠️ Setup script (creates symlinks based on OS)
+├── shared/           # Universal dotfiles (.zshrc, .vimrc, etc.)
+├── shared/config/    # XDG configs (starship.toml, nvim/, etc.)
+├── macos/            # macOS-specific dotfiles (wezterm.lua, zprofile)
+├── linux/            # Linux-specific dotfiles (zprofile, etc.)
+├── devkick/
+│   ├── bin/
+│   │   └── devrc-init      # Script to scaffold & launch dev sessions
+│   └── setup.sh            # One-time PATH setup for devrc-init
+├── install.sh        # Symlinks dotfiles based on OS
 ├── .gitignore
 └── README.md
 
-## ⚙️ Installation
-
-Clone the repo into your home directory:
-
-```bash
+Installing Dotfiles
 git clone https://github.com/mehannioui/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 chmod +x install.sh
@@ -57,14 +58,11 @@ A minimal, terminal-based development environment for fullstack apps using:
 
 ## 🚀 Quick Start
 
-```bash
-git clone https://github.com/mehannioui/dotfiles.git ~/dotfiles
-chmod +x ~/dotfiles/bin/devrc-init
-echo 'export PATH="$HOME/dotfiles/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
+cd ~/dotfiles
+chmod +x devkick/bin/devrc-init
+./devkick/setup.sh
 
-Then inside any new project folder:
+Then inside any new project folder from a terminal:
 
 ```bash
 devrc-init
