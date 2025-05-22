@@ -9,7 +9,7 @@
 .zsh_sessions
 .zshrc.pre-oh-my-zsh
 .zcompdump*
-.zsh*
+#.zsh*
 
 # Python
 __pycache__/
@@ -18,7 +18,17 @@ __pycache__/
 
 # macOS
 .DS_Store
-.Trash/
+.AppleDouble
+.LSOverride
+# Icon must end with two \r
+Icon\r\r
+# Thumbnails
+._*
+# Files that might appear in the root of a volume
+.Spotlight-V100
+.Trashes
+# Brew
+.Brewfile.lock.json
 
 # VSCode
 .vscode/
