@@ -69,7 +69,7 @@ dotfiles/
 ├── install.sh            # Symlinks dotfiles based on OS
 ├── .gitignore            # Specifies intentionally untracked files
 └── README.md             # This file
-
+```
 ---
 
 ## 🔧 Usage
