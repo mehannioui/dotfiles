@@ -27,7 +27,7 @@ This repo is modular, multi-platform, and optimized for clean symlinks and devel
 ```bash
 dotfiles/
 ├── shared/           # Universal dotfiles (.zshrc, .vimrc, etc.)
-├── shared/config/    # XDG configs (starship.toml, nvim/, etc.)
+├── └── config/       # XDG configs (starship.toml, nvim/, etc.)
 ├── macos/            # macOS-specific dotfiles (wezterm.lua, zprofile)
 ├── linux/            # Linux-specific dotfiles (zprofile, etc.)
 ├── devkick/
