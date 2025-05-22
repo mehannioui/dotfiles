@@ -6,7 +6,7 @@ set -e # Exit immediately if a command exits with a non-zero status.
 # Ensure your GitHub username and repo name are correct here
 DOTFILES_REPO_URL="git@github.com:mehannioui/dotfiles.git"
 DOTFILES_DIR="$HOME/dotfiles"
-CONFIG_DIR="$HOME/.config"
+CONFIG_DIR="$HOME/.config" # This is typically ~/.config
 
 OS="$(uname)"
 
@@ -60,25 +60,27 @@ force_symlink() {
   echo "✅ Linked $symlink_basename."
 }
 
-# -------- Shared Dotfiles (for $HOME) --------
-echo "🔗 Processing shared dotfiles for $HOME/ ..."
-# Loop through non-hidden files AND dotfiles (excluding . and .. and .git)
-# Using find is more robust for hidden files than '.*'
+# -------- Shared Dotfiles (for linking directly into $HOME) --------
+echo "🔗 Processing shared files from $DOTFILES_DIR/shared/ for $HOME/ ..."
+# This loop finds files/dirs directly under 'shared/' (like .zshrc, .gitconfig).
+# It explicitly excludes the 'config' subdirectory from this specific linking operation
+# because 'shared/config/' items are handled next for the ~/.config directory.
 find "$DOTFILES_DIR/shared" -maxdepth 1 -mindepth 1 \( -name ".*" -o -not -name ".*" \) -not -name ".git" -not -name "config" | while read -r file_path; do
   filename="$(basename "$file_path")"
-  # Skip 'config' directory here as it's handled separately
-  if [[ "$filename" == "config" ]]; then
+  # The check for "config" here is just an extra safeguard for this loop's intent
+  if [[ "$filename" == "config" ]]; then 
       continue
   fi
   force_symlink "$file_path" "$HOME/$filename"
 done
 
-# -------- Shared .config Files/Directories --------
+# -------- Shared .config Items (for linking into $HOME/.config) --------
 SHARED_CONFIG_SOURCE_DIR="$DOTFILES_DIR/shared/config"
 if [ -d "$SHARED_CONFIG_SOURCE_DIR" ]; then
   echo "🗂️ Processing shared config items from $SHARED_CONFIG_SOURCE_DIR/ to $CONFIG_DIR/ ..."
   mkdir -p "$CONFIG_DIR" # Ensure ~/.config exists
-  # Loop through all items (files and directories) in shared/config
+  # This loop finds files/dirs directly under 'shared/config/' (like nvim/, yazi/, starship.toml)
+  # and links them into ~/.config/
   find "$SHARED_CONFIG_SOURCE_DIR" -maxdepth 1 -mindepth 1 | while read -r item_path; do
     item_name="$(basename "$item_path")"
     force_symlink "$item_path" "$CONFIG_DIR/$item_name"
@@ -86,26 +88,28 @@ if [ -d "$SHARED_CONFIG_SOURCE_DIR" ]; then
 fi
 
 # -------- Platform-Specific Dotfiles & Configs --------
-platform_dotfiles_dir=""
-platform_config_dir="" # For OS-specific .config items
+platform_dotfiles_dir_for_home=""    # Source for OS-specific files for $HOME
+platform_config_dir_for_xdg="" # Source for OS-specific files for $HOME/.config
 platform_name=""
 
 if [[ "$OS" == "Darwin" ]]; then
   platform_name="macOS"
-  platform_dotfiles_dir="$DOTFILES_DIR/macos"
-  platform_config_dir="$DOTFILES_DIR/macos/config" # Optional OS-specific config path
+  platform_dotfiles_dir_for_home="$DOTFILES_DIR/macos"
+  platform_config_dir_for_xdg="$DOTFILES_DIR/macos/config"
 elif [[ "$OS" == "Linux" ]]; then
   platform_name="Linux"
-  platform_dotfiles_dir="$DOTFILES_DIR/linux"
-  platform_config_dir="$DOTFILES_DIR/linux/config" # Optional OS-specific config path
+  platform_dotfiles_dir_for_home="$DOTFILES_DIR/linux"
+  platform_config_dir_for_xdg="$DOTFILES_DIR/linux/config"
 fi
 
 # Link OS-specific dotfiles for $HOME
-if [ -n "$platform_dotfiles_dir" ] && [ -d "$platform_dotfiles_dir" ]; then
-  echo "💻 Processing $platform_name-specific dotfiles for $HOME/ from $platform_dotfiles_dir/ ..."
-  find "$platform_dotfiles_dir" -maxdepth 1 -mindepth 1 \( -name ".*" -o -not -name ".*" \) -not -name ".git" -not -name "config" | while read -r file_path; do
+if [ -n "$platform_dotfiles_dir_for_home" ] && [ -d "$platform_dotfiles_dir_for_home" ]; then
+  echo "💻 Processing $platform_name-specific files from $platform_dotfiles_dir_for_home/ for $HOME/ ..."
+  # This loop finds files/dirs directly under 'macos/' or 'linux/' (like .zprofile_macos).
+  # It explicitly excludes their 'config' subdirectory from this specific linking operation.
+  find "$platform_dotfiles_dir_for_home" -maxdepth 1 -mindepth 1 \( -name ".*" -o -not -name ".*" \) -not -name ".git" -not -name "config" | while read -r file_path; do
     filename="$(basename "$file_path")"
-    if [[ "$filename" == "config" ]]; then # Skip 'config' subdirectory if present
+    if [[ "$filename" == "config" ]]; then
         continue
     fi
     force_symlink "$file_path" "$HOME/$filename"
@@ -113,15 +117,17 @@ if [ -n "$platform_dotfiles_dir" ] && [ -d "$platform_dotfiles_dir" ]; then
 fi
 
 # Link OS-specific .config items
-if [ -n "$platform_config_dir" ] && [ -d "$platform_config_dir" ]; then
-  echo "💻 Processing $platform_name-specific config items from $platform_config_dir/ to $CONFIG_DIR/ ..."
+if [ -n "$platform_config_dir_for_xdg" ] && [ -d "$platform_config_dir_for_xdg" ]; then
+  echo "💻 Processing $platform_name-specific config items from $platform_config_dir_for_xdg/ to $CONFIG_DIR/ ..."
   mkdir -p "$CONFIG_DIR" # Ensure ~/.config exists
-  find "$platform_config_dir" -maxdepth 1 -mindepth 1 | while read -r item_path; do
+  # This loop finds files/dirs directly under 'macos/config/' or 'linux/config/'
+  # and links them into ~/.config/, potentially overwriting shared versions if names match.
+  find "$platform_config_dir_for_xdg" -maxdepth 1 -mindepth 1 | while read -r item_path; do
     item_name="$(basename "$item_path")"
     force_symlink "$item_path" "$CONFIG_DIR/$item_name"
   done
 fi
 
 echo "🎉 Dotfiles setup script finished!"
-echo "   Existing files/symlinks at target locations were overwritten if different."
+echo "   Existing files/symlinks at target locations were overwritten if different (no backups made)."
 echo "   Please restart your shell or source your shell configuration file for changes to take effect."
