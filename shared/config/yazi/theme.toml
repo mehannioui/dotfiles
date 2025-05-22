@@ -1,0 +1,13 @@
+# ~/.config/yazi/theme.toml
+
+# This assumes you have the "catppuccin-mocha.yazi" flavor installed in the flavors directory
+[flavor]
+# For dark mode terminals
+dark = "catppuccin-mocha"
+# For light mode terminals (can be the same or a different one)
+light = "catppuccin-mocha"
+
+# You might need to specify the syntect theme for syntax highlighting in previews
+# in your yazi.toml or sometimes here, matching the flavor.
+# [preview]
+# syntect_theme = "catppuccin-mocha" # This might go in yazi.toml under [preview]

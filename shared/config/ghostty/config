@@ -1,0 +1,31 @@
+### The window ###
+# resize-overlay-duration = 4s 200ms
+window-height = 1080
+window-width = 1920
+window-decoration = none
+#fullscreen = true
+background-opacity = 0.75
+#background-blur = true
+background-blur-radius = 20
+background = #000000
+
+### font ###
+font-family = "0xProto Nerd Font"
+font-size = 19
+
+### theme ###
+# To see a list of available themes, run: ghostty +list-themes.
+theme = rose-pine
+#theme = "Solarized Dark - Patched"
+#theme = catppuccin-mocha
+
+### mouse ###
+cursor-style = block
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+#keybind = global:cmd+ctrl+shift+j=toggle_visibility
+
+macos-option-as-alt = left
+keybind = alt+left=unbind
+keybind = alt+right=unbind
