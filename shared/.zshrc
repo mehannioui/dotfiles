@@ -121,6 +121,7 @@ alias srz="source ~/.zshrc && echo Done Sourcing!"
 alias c="clear"
 alias y="yazi"
 alias cdd="cd ~/Desktop"
+alias gravity="ssh gravity@100.99.105.75"
 
 #########################################
 
