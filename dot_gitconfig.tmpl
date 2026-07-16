@@ -1,0 +1,25 @@
+[user]
+    name = {{ .name }}
+    email = {{ .email }}
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = nvim
+{{- if eq .chezmoi.os "darwin" }}
+    excludesfile = ~/.gitignore_global
+{{- end }}
+
+[credential]
+{{- if eq .chezmoi.os "darwin" }}
+    helper = osxkeychain
+{{- else if eq .chezmoi.os "linux" }}
+    helper = cache --timeout=3600
+{{- end }}
+
+[pull]
+    rebase = false
+
+[color]
+    ui = auto
