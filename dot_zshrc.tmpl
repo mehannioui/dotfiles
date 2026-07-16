@@ -1,6 +1,15 @@
 #If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+{{- if eq .chezmoi.os "darwin" }}
+# macOS-only
+export PATH="/opt/homebrew/bin:$PATH"
+alias aerospace-reload="aerospace reload-config"
+{{- else if eq .chezmoi.os "linux" }}
+# Ubuntu-only
+export PATH="$HOME/.local/bin:$PATH"
+{{- end }}
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
